@@ -1,4 +1,6 @@
 package lk.ijse.posreactspringbootbackend.dao.impl;
 
-public class UserRegisterDAOImpl {
+import lk.ijse.posreactspringbootbackend.dao.UserRegisterDAO;
+
+public class UserRegisterDAOImpl implements UserRegisterDAO {
 }

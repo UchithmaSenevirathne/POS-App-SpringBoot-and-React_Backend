@@ -1,4 +1,4 @@
 package lk.ijse.posreactspringbootbackend.service;
 
-public class UserRegisterService {
+public interface UserRegisterService {
 }

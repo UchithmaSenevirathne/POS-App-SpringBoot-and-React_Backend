@@ -1,6 +1,7 @@
 package lk.ijse.posreactspringbootbackend.controller;
 
 import lk.ijse.posreactspringbootbackend.dto.UserDTO;
+import lk.ijse.posreactspringbootbackend.exception.DataPersistFailedException;
 import lk.ijse.posreactspringbootbackend.service.UserRegisterService;
 import lk.ijse.posreactspringbootbackend.util.AppUtil;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,10 @@ public class UserRegisterController {
 
             userRegisterService.saveUser(userDTO);
             return new ResponseEntity<>(HttpStatus.CREATED);
+        }catch (DataPersistFailedException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

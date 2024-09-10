@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "lk.ijse.posreactspringbootbackend")
-@EnableJpaRepositories(basePackages = "lk.ijse.posreactspringbootbackend")
+//@EnableJpaRepositories(basePackages = "lk.ijse.posreactspringbootbackend")
 @EnableTransactionManagement
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 2,  //2MB

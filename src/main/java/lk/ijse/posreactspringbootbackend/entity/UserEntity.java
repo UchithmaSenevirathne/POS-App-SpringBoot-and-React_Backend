@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class UserEntity {
     @Id
     @GeneratedValue
-    private String userId;
+    private int userId;
     private String name;
     private String address;
     private String contact;

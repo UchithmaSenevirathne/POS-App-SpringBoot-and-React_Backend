@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/backend/user")
 @CrossOrigin
 @RequiredArgsConstructor
 public class UserRegisterController {

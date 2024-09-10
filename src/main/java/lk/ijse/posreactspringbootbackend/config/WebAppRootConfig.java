@@ -32,7 +32,7 @@ public class WebAppRootConfig {
     public DataSource dataSource() {
 
         var dbms = new DriverManagerDataSource();
-        dbms.setDriverClassName("com.mysql.jdbc.Driver");
+        dbms.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dbms.setUrl("jdbc:mysql://localhost:3306/pos_react_spring?createDatabaseIfNotExist=true");
         dbms.setUsername("root");
         dbms.setPassword("1234");

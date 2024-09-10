@@ -24,7 +24,7 @@ public class UserRegisterServiceImpl implements UserRegisterService {
     public void saveUser(UserDTO userDTO) {
         UserEntity savedUser = userDAO.save(mapping.convertToUserEntity(userDTO));
 
-        if (savedUser == null && savedUser.getUserId() == null) {
+        if (savedUser == null && savedUser.getUserId() == 0) {
             throw new DataPersistFailedException("User not saved");
         }
     }

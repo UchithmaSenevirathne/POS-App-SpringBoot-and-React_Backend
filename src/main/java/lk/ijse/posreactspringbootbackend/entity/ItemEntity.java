@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class ItemEntity {
     @Id
     @GeneratedValue
-    private Long itemId;
+    private int itemId;
     private String itemName;
     private Double itemPrice;
     private int itemQuantity;

@@ -13,4 +13,6 @@ public interface UserRegisterService {
     List<UserDTO> getAllUsers();
 
     void updateUser(UserDTO updateBuidUserDto);
+
+    void deleteUser(int userId);
 }

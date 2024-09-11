@@ -60,4 +60,14 @@ public class UserRegisterServiceImpl implements UserRegisterService {
         }
     }
 
+    @Override
+    public void deleteUser(int userId) {
+        Optional<UserEntity> tmpUserEntity = userDAO.findById(userId);
+        if(!tmpUserEntity.isPresent()){
+            throw new UserNotFoundException("User Not Found");
+        }else {
+            userDAO.deleteById(userId);
+        }
+    }
+
 }

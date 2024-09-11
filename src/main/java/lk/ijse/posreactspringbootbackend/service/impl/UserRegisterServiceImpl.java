@@ -6,6 +6,7 @@ import lk.ijse.posreactspringbootbackend.dao.UserDAO;
 import lk.ijse.posreactspringbootbackend.dto.UserDTO;
 import lk.ijse.posreactspringbootbackend.entity.UserEntity;
 import lk.ijse.posreactspringbootbackend.exception.DataPersistFailedException;
+import lk.ijse.posreactspringbootbackend.exception.UserNotFoundException;
 import lk.ijse.posreactspringbootbackend.service.UserRegisterService;
 import lk.ijse.posreactspringbootbackend.util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -45,7 +47,17 @@ public class UserRegisterServiceImpl implements UserRegisterService {
 
     @Override
     public void updateUser(UserDTO updateBuidUserDto) {
-
+        Optional<UserEntity> tmpUserEntity = userDAO.findById(updateBuidUserDto.getUserId());
+        if(!tmpUserEntity.isPresent()){
+            throw new UserNotFoundException("User Not Found");
+        }else {
+            tmpUserEntity.get().setName(updateBuidUserDto.getName());
+            tmpUserEntity.get().setAddress(updateBuidUserDto.getAddress());
+            tmpUserEntity.get().setContact(updateBuidUserDto.getContact());
+            tmpUserEntity.get().setEmail(updateBuidUserDto.getEmail());
+            tmpUserEntity.get().setPassword(updateBuidUserDto.getPassword());
+            tmpUserEntity.get().setProfilePicture(updateBuidUserDto.getProfilePicture());
+        }
     }
 
 }

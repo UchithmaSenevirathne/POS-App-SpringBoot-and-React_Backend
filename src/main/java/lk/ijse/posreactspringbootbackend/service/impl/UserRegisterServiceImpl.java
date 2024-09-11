@@ -42,4 +42,10 @@ public class UserRegisterServiceImpl implements UserRegisterService {
     public List<UserDTO> getAllUsers() {
         return mapping.convertToUserDTOList(userDAO.findAll());
     }
+
+    @Override
+    public void updateUser(UserDTO updateBuidUserDto) {
+
+    }
+
 }

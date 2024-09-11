@@ -11,4 +11,6 @@ public interface UserRegisterService {
     UserDTO getSelectedUser(int userId);
 
     List<UserDTO> getAllUsers();
+
+    void updateUser(UserDTO updateBuidUserDto);
 }

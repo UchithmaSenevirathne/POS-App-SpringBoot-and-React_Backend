@@ -3,6 +3,7 @@ package lk.ijse.posreactspringbootbackend.controller;
 import lk.ijse.posreactspringbootbackend.customobj.UserResponse;
 import lk.ijse.posreactspringbootbackend.dto.UserDTO;
 import lk.ijse.posreactspringbootbackend.exception.DataPersistFailedException;
+import lk.ijse.posreactspringbootbackend.exception.UserNotFoundException;
 import lk.ijse.posreactspringbootbackend.service.UserRegisterService;
 import lk.ijse.posreactspringbootbackend.util.AppUtil;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,38 @@ public class UserRegisterController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Void> updateUser
+            (@PathVariable ("id") int id,
+             @RequestPart("name") String updateName,
+             @RequestPart("address")String updateAddress,
+             @RequestPart("contact") String updateContact,
+             @RequestPart("email")String updateEmail,
+             @RequestPart("password")String updatePassword,
+             @RequestPart("profilePicture")String updateProfilePicture){
+
+        try {
+            String updateBase64ProfilePic = AppUtil.toBase64ProfilePic(updateProfilePicture);
+
+            var updateBuidUserDto = new UserDTO();
+            updateBuidUserDto.setUserId(id);
+            updateBuidUserDto.setName(updateName);
+            updateBuidUserDto.setAddress(updateAddress);
+            updateBuidUserDto.setContact(updateContact);
+            updateBuidUserDto.setEmail(updateEmail);
+            updateBuidUserDto.setPassword(updatePassword);
+            updateBuidUserDto.setProfilePicture(updateBase64ProfilePic);
+
+            userRegisterService.updateUser(updateBuidUserDto);
+
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (UserNotFoundException e){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

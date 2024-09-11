@@ -1,6 +1,8 @@
 package lk.ijse.posreactspringbootbackend.util;
 
+import lk.ijse.posreactspringbootbackend.dto.ItemDTO;
 import lk.ijse.posreactspringbootbackend.dto.UserDTO;
+import lk.ijse.posreactspringbootbackend.entity.ItemEntity;
 import lk.ijse.posreactspringbootbackend.entity.UserEntity;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -26,5 +28,18 @@ public class Mapping {
 
     public List<UserDTO> convertToUserDTOList(List<UserEntity> userEntityList) {
         return modelMapper.map(userEntityList, new TypeToken<List<UserDTO>>() {}.getType());
+    }
+
+    //item matters mapping
+    public ItemDTO convertToItemDTO(ItemEntity itemEntity) {
+        return modelMapper.map(itemEntity, ItemDTO.class);
+    }
+
+    public ItemEntity convertToItemEntity(ItemDTO itemDTO) {
+        return modelMapper.map(itemDTO, ItemEntity.class);
+    }
+
+    public List<ItemDTO> convertToItemDTOList(List<ItemEntity> itemEntityList) {
+        return modelMapper.map(itemEntityList, new TypeToken<List<ItemDTO>>() {}.getType());
     }
 }

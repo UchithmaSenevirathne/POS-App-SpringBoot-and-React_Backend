@@ -1,5 +1,6 @@
 package lk.ijse.posreactspringbootbackend.controller;
 
+import lk.ijse.posreactspringbootbackend.customobj.UserResponse;
 import lk.ijse.posreactspringbootbackend.dto.UserDTO;
 import lk.ijse.posreactspringbootbackend.exception.DataPersistFailedException;
 import lk.ijse.posreactspringbootbackend.service.UserRegisterService;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/backend/user")
@@ -49,5 +52,15 @@ public class UserRegisterController {
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserDTO getSelectedUser(@PathVariable ("id") int userId){
+        return userRegisterService.getSelectedUser(userId);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<UserDTO> getAllUsers(){
+        return userRegisterService.getAllUsers();
     }
 }

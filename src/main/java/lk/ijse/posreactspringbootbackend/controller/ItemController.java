@@ -86,7 +86,7 @@ public class ItemController {
     }
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public UserDTO getSelectedItem(@PathVariable ("id") int itemId){
+    public ItemDTO getSelectedItem(@PathVariable ("id") int itemId){
         return itemService.getSelectedItem(itemId);
     }
 

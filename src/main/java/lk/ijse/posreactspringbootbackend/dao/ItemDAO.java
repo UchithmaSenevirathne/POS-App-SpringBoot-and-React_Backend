@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ItemDAO extends JpaRepository<ItemEntity, Integer> {
+
+    ItemEntity getItemEntitiesByItemId(int itemId);
 }

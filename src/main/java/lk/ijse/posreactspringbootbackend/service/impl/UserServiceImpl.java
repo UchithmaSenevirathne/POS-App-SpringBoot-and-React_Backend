@@ -1,13 +1,11 @@
 package lk.ijse.posreactspringbootbackend.service.impl;
 
-import lk.ijse.posreactspringbootbackend.customobj.UserErrorResponse;
-import lk.ijse.posreactspringbootbackend.customobj.UserResponse;
 import lk.ijse.posreactspringbootbackend.dao.UserDAO;
 import lk.ijse.posreactspringbootbackend.dto.UserDTO;
 import lk.ijse.posreactspringbootbackend.entity.UserEntity;
 import lk.ijse.posreactspringbootbackend.exception.DataPersistFailedException;
 import lk.ijse.posreactspringbootbackend.exception.UserNotFoundException;
-import lk.ijse.posreactspringbootbackend.service.UserRegisterService;
+import lk.ijse.posreactspringbootbackend.service.UserService;
 import lk.ijse.posreactspringbootbackend.util.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +16,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class UserRegisterServiceImpl implements UserRegisterService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDAO userDAO;

@@ -1,10 +1,9 @@
 package lk.ijse.posreactspringbootbackend.controller;
 
-import lk.ijse.posreactspringbootbackend.customobj.UserResponse;
 import lk.ijse.posreactspringbootbackend.dto.UserDTO;
 import lk.ijse.posreactspringbootbackend.exception.DataPersistFailedException;
 import lk.ijse.posreactspringbootbackend.exception.UserNotFoundException;
-import lk.ijse.posreactspringbootbackend.service.UserRegisterService;
+import lk.ijse.posreactspringbootbackend.service.UserService;
 import lk.ijse.posreactspringbootbackend.util.AppUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +18,13 @@ import java.util.List;
 @RequestMapping("/backend/user")
 @CrossOrigin
 @RequiredArgsConstructor
-public class UserRegisterController {
+public class UserController {
 
     @Autowired
-    private final UserRegisterService userRegisterService;
+    private final UserService userService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> saveUser(
+    public ResponseEntity<String> registerUser(
             @RequestPart("name") String name,
             @RequestPart("address") String address,
             @RequestPart("contact") String contact,
@@ -46,7 +45,7 @@ public class UserRegisterController {
             userDTO.setPassword(password);
             userDTO.setProfilePicture(base64ProfilePic);
 
-            userRegisterService.saveUser(userDTO);
+            userService.saveUser(userDTO);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }catch (DataPersistFailedException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -77,7 +76,7 @@ public class UserRegisterController {
             updateBuidUserDto.setPassword(updatePassword);
             updateBuidUserDto.setProfilePicture(updateBase64ProfilePic);
 
-            userRegisterService.updateUser(updateBuidUserDto);
+            userService.updateUser(updateBuidUserDto);
 
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }catch (UserNotFoundException e){
@@ -89,18 +88,18 @@ public class UserRegisterController {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserDTO getSelectedUser(@PathVariable ("id") int userId){
-        return userRegisterService.getSelectedUser(userId);
+        return userService.getSelectedUser(userId);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserDTO> getAllUsers(){
-        return userRegisterService.getAllUsers();
+        return userService.getAllUsers();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable ("id") int userId){
         try {
-            userRegisterService.deleteUser(userId);
+            userService.deleteUser(userId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }catch (UserNotFoundException e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

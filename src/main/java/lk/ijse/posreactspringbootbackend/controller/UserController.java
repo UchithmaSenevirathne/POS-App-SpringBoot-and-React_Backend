@@ -1,10 +1,14 @@
 package lk.ijse.posreactspringbootbackend.controller;
 
+import lk.ijse.posreactspringbootbackend.dto.AuthDTO;
+import lk.ijse.posreactspringbootbackend.dto.ResponseDTO;
 import lk.ijse.posreactspringbootbackend.dto.UserDTO;
 import lk.ijse.posreactspringbootbackend.exception.DataPersistFailedException;
 import lk.ijse.posreactspringbootbackend.exception.UserNotFoundException;
 import lk.ijse.posreactspringbootbackend.service.UserService;
 import lk.ijse.posreactspringbootbackend.util.AppUtil;
+import lk.ijse.posreactspringbootbackend.util.JwtUtil;
+import lk.ijse.posreactspringbootbackend.util.VarList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,9 +26,11 @@ public class UserController {
 
     @Autowired
     private final UserService userService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> registerUser(
+    public ResponseEntity<ResponseDTO> registerUser(
             @RequestPart("name") String name,
             @RequestPart("address") String address,
             @RequestPart("contact") String contact,
@@ -46,11 +52,27 @@ public class UserController {
             userDTO.setProfilePicture(base64ProfilePic);
 
             int res = userService.saveUser(userDTO);
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        }catch (DataPersistFailedException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            switch (res) {
+                case VarList.Created -> {
+                    String token = jwtUtil.generateToken(userDTO);
+                    AuthDTO authDTO = new AuthDTO();
+                    authDTO.setEmail(userDTO.getEmail());
+                    authDTO.setToken(token);
+                    return ResponseEntity.status(HttpStatus.CREATED)
+                            .body(new ResponseDTO(VarList.Created, "Success", authDTO));
+                }
+                case VarList.Not_Acceptable -> {
+                    return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE)
+                            .body(new ResponseDTO(VarList.Not_Acceptable, "Email Already Used", null));
+                }
+                default -> {
+                    return ResponseEntity.status(HttpStatus.BAD_GATEWAY)
+                            .body(new ResponseDTO(VarList.Bad_Gateway, "Error", null));
+                }
+            }
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(VarList.Internal_Server_Error, e.getMessage(), null));
         }
     }
 

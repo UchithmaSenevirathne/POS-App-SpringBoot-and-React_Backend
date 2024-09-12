@@ -22,4 +22,5 @@ public class UserEntity {
     private String password;
     @Column(columnDefinition = "LONGTEXT")
     private String profilePicture;
+    private String userRole;
 }

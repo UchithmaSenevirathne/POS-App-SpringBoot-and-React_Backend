@@ -45,7 +45,7 @@ public class UserController {
             userDTO.setPassword(password);
             userDTO.setProfilePicture(base64ProfilePic);
 
-            userService.saveUser(userDTO);
+            int res = userService.saveUser(userDTO);
             return new ResponseEntity<>(HttpStatus.CREATED);
         }catch (DataPersistFailedException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

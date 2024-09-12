@@ -7,7 +7,9 @@ import lk.ijse.posreactspringbootbackend.exception.DataPersistFailedException;
 import lk.ijse.posreactspringbootbackend.exception.UserNotFoundException;
 import lk.ijse.posreactspringbootbackend.service.UserService;
 import lk.ijse.posreactspringbootbackend.util.Mapping;
+import lk.ijse.posreactspringbootbackend.util.VarList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,11 +27,15 @@ public class UserServiceImpl implements UserService {
     private Mapping mapping;
 
     @Override
-    public void saveUser(UserDTO userDTO) {
-        UserEntity savedUser = userDAO.save(mapping.convertToUserEntity(userDTO));
-
-        if (savedUser == null && savedUser.getUserId() == 0) {
-            throw new DataPersistFailedException("User not saved");
+    public int saveUser(UserDTO userDTO) {
+        if (userDAO.existsByEmail(userDTO.getEmail())) {
+            return VarList.Not_Acceptable;
+        }else{
+                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+                userDTO.setUserRole("USER");
+                userDAO.save(mapping.convertToUserEntity(userDTO));
+                return VarList.Created;
         }
     }
 

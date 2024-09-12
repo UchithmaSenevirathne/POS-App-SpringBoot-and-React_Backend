@@ -5,7 +5,7 @@ import lk.ijse.posreactspringbootbackend.dto.UserDTO;
 import java.util.List;
 
 public interface UserService {
-    void saveUser(UserDTO userDTO);
+    int saveUser(UserDTO userDTO);
 
     UserDTO getSelectedUser(int userId);
 

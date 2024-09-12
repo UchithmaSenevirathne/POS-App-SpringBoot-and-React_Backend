@@ -9,16 +9,21 @@ import lk.ijse.posreactspringbootbackend.service.UserService;
 import lk.ijse.posreactspringbootbackend.util.Mapping;
 import lk.ijse.posreactspringbootbackend.util.VarList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private UserDAO userDAO;
@@ -28,6 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int saveUser(UserDTO userDTO) {
+        System.out.println("save service");
         if (userDAO.existsByEmail(userDTO.getEmail())) {
             return VarList.Not_Acceptable;
         }else{
@@ -72,6 +78,24 @@ public class UserServiceImpl implements UserService {
         }else {
             userDAO.deleteById(userId);
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) {
+        UserEntity userEntity = userDAO.findByEmail(email);
+        return new org.springframework.security.core.userdetails.User(userEntity.getEmail(), userEntity.getPassword(), getAuthority(userEntity));
+    }
+
+    @Override
+    public UserDTO loadUserDetailsByUsername(String email) {
+        UserEntity user = userDAO.findByEmail(email);
+        return mapping.convertToUserDTO(user);
+    }
+
+    private Set<SimpleGrantedAuthority> getAuthority(UserEntity userEntity) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority(userEntity.getUserRole()));
+        return authorities;
     }
 
 }

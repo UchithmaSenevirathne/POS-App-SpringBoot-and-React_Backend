@@ -89,6 +89,36 @@ public class UserController {
         }
     }
 
+//    @PostMapping("/authenticate")
+//    public ResponseEntity<ResponseDTO> authenticate(@RequestBody UserDTO userDTO) {
+//        try {
+//            authenticationManager.authenticate(
+//                    new UsernamePasswordAuthenticationToken(userDTO.getEmail(), userDTO.getPassword()));
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                    .body(new ResponseDTO(VarList.Unauthorized, "Invalid Credentials", e.getMessage()));
+//        }
+//
+//        UserDTO loadedUser = userService.loadUserDetailsByUsername(userDTO.getEmail());
+//        if (loadedUser == null) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT)
+//                    .body(new ResponseDTO(VarList.Conflict, "Authorization Failure! Please Try Again", null));
+//        }
+//
+//        String token = jwtUtil.generateToken(loadedUser);
+//        if (token == null || token.isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT)
+//                    .body(new ResponseDTO(VarList.Conflict, "Authorization Failure! Please Try Again", null));
+//        }
+//
+//        AuthDTO authDTO = new AuthDTO();
+//        authDTO.setEmail(loadedUser.getEmail());
+//        authDTO.setToken(token);
+//
+//        return ResponseEntity.status(HttpStatus.CREATED)
+//                .body(new ResponseDTO(VarList.Created, "Success", authDTO));
+//    }
+
     @PostMapping("/authenticate")
     public ResponseEntity<ResponseDTO> authenticate(@RequestBody UserDTO userDTO) {
         try {
@@ -105,19 +135,43 @@ public class UserController {
                     .body(new ResponseDTO(VarList.Conflict, "Authorization Failure! Please Try Again", null));
         }
 
-        String token = jwtUtil.generateToken(loadedUser);
-        if (token == null || token.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(new ResponseDTO(VarList.Conflict, "Authorization Failure! Please Try Again", null));
+        // Check user role
+        if ("ADM".equals(loadedUser.getUserRole())) {
+            // Handle admin login
+            String token = jwtUtil.generateToken(loadedUser);
+            if (token == null || token.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(new ResponseDTO(VarList.Conflict, "Authorization Failure! Please Try Again", null));
+            }
+
+            AuthDTO authDTO = new AuthDTO();
+            authDTO.setEmail(loadedUser.getEmail());
+            authDTO.setToken(token);
+            authDTO.setRole("ADM");
+
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseDTO(VarList.Created, "Admin Login Success", authDTO));
+        } else if ("USER".equals(loadedUser.getUserRole())) {
+            // Handle user login
+            String token = jwtUtil.generateToken(loadedUser);
+            if (token == null || token.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT)
+                        .body(new ResponseDTO(VarList.Conflict, "Authorization Failure! Please Try Again", null));
+            }
+
+            AuthDTO authDTO = new AuthDTO();
+            authDTO.setEmail(loadedUser.getEmail());
+            authDTO.setToken(token);
+            authDTO.setRole("USER");
+
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(new ResponseDTO(VarList.Created, "User Login Success", authDTO));
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ResponseDTO(VarList.Forbidden, "Invalid Role", null));
         }
-
-        AuthDTO authDTO = new AuthDTO();
-        authDTO.setEmail(loadedUser.getEmail());
-        authDTO.setToken(token);
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ResponseDTO(VarList.Created, "Success", authDTO));
     }
+
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> updateUser
@@ -150,6 +204,20 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/details")
+    public ResponseEntity<UserDTO> getUserDetails(@RequestParam String email) {
+        UserDTO userDTO = userService.loadUserDetailsByUsername(email);
+        String profilePic = AppUtil.toProfilePic(userDTO.getProfilePicture());
+        userDTO.setProfilePicture(profilePic);
+        if (userDTO != null) {
+            return ResponseEntity.ok(userDTO);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public UserDTO getSelectedUser(@PathVariable ("id") int userId){

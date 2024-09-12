@@ -56,7 +56,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDTO> getAllItems() {
-        return mapping.convertToItemDTOList(itemDAO.findAll());
+        List<ItemDTO> itemDTOS = mapping.convertToItemDTOList(itemDAO.findAll());
+        System.out.println(itemDTOS.get(0).getItemId());
+        return itemDTOS;
     }
 
     @Override

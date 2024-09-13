@@ -14,4 +14,5 @@ public class ItemDTO {
     private Double itemPrice;
     private int itemQuantity;
     private String itemImage;
+    private int categoryId;
 }

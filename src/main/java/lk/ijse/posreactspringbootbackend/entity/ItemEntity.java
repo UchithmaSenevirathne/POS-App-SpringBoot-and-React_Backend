@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -19,4 +21,7 @@ public class ItemEntity {
     private int itemQuantity;
     @Column(columnDefinition = "LONGTEXT")
     private String itemImage;
+    // Many-to-Many relationship with OrderEntity
+    @ManyToMany(mappedBy = "items")
+    private List<OrderEntity> orders;
 }

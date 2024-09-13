@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -23,4 +25,7 @@ public class UserEntity {
     @Column(columnDefinition = "LONGTEXT")
     private String profilePicture;
     private String userRole;
+    // One user can have many orders
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<OrderEntity> orders;
 }

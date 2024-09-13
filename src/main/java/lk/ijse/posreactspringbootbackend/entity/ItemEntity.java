@@ -24,4 +24,8 @@ public class ItemEntity {
     // Many-to-Many relationship with OrderEntity
     @ManyToMany(mappedBy = "items")
     private List<OrderEntity> orders;
+    // Many items can be one cat
+    @ManyToOne
+    @JoinColumn(name = "catId", referencedColumnName = "cat_id")
+    private CategoryEntity category;
 }

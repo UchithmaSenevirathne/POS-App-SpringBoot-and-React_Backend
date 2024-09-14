@@ -30,6 +30,7 @@ public class ItemController {
             @RequestPart("itemName") String itemName,
             @RequestPart("unitPrice") String unitPrice,
             @RequestPart("itemQty") String itemQty,
+            @RequestPart("categoryId") int categoryId,
             @RequestPart("itemImage") String itemImage
     ) {
         try {
@@ -44,6 +45,7 @@ public class ItemController {
             itemDTO.setItemPrice(parsedUnitPrice);
             itemDTO.setItemQuantity(parsedItemQty);
             itemDTO.setItemImage(base64ItemImg);
+            itemDTO.setCategoryId(categoryId);
 
             itemService.saveItem(itemDTO);
             return new ResponseEntity<>(HttpStatus.CREATED);

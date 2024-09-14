@@ -1,8 +1,10 @@
 package lk.ijse.posreactspringbootbackend.util;
 
+import lk.ijse.posreactspringbootbackend.dto.CategoryDTO;
 import lk.ijse.posreactspringbootbackend.dto.ItemDTO;
 import lk.ijse.posreactspringbootbackend.dto.OrderDTO;
 import lk.ijse.posreactspringbootbackend.dto.UserDTO;
+import lk.ijse.posreactspringbootbackend.entity.CategoryEntity;
 import lk.ijse.posreactspringbootbackend.entity.ItemEntity;
 import lk.ijse.posreactspringbootbackend.entity.OrderEntity;
 import lk.ijse.posreactspringbootbackend.entity.UserEntity;
@@ -56,5 +58,18 @@ public class Mapping {
 
     public List<OrderDTO> convertToOrderDTOList(List<OrderEntity> orderEntityList) {
         return modelMapper.map(orderEntityList, new TypeToken<List<OrderDTO>>() {}.getType());
+    }
+
+    //category matters mapping
+    public CategoryDTO convertToCategoryDTO(CategoryEntity orderEntity) {
+        return modelMapper.map(orderEntity, CategoryDTO.class);
+    }
+
+    public CategoryEntity convertToCategoryEntity(CategoryDTO categoryDTO) {
+        return modelMapper.map(categoryDTO, CategoryEntity.class);
+    }
+
+    public List<CategoryDTO> convertToCategoryDTOList(List<CategoryEntity> orderEntityList) {
+        return modelMapper.map(orderEntityList, new TypeToken<List<CategoryDTO>>() {}.getType());
     }
 }

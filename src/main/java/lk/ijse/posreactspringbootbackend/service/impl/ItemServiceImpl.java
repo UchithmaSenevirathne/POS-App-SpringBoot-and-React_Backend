@@ -1,8 +1,10 @@
 package lk.ijse.posreactspringbootbackend.service.impl;
 
+import lk.ijse.posreactspringbootbackend.dao.CategoryDAO;
 import lk.ijse.posreactspringbootbackend.dao.ItemDAO;
 import lk.ijse.posreactspringbootbackend.dto.ItemDTO;
 import lk.ijse.posreactspringbootbackend.dto.UserDTO;
+import lk.ijse.posreactspringbootbackend.entity.CategoryEntity;
 import lk.ijse.posreactspringbootbackend.entity.ItemEntity;
 import lk.ijse.posreactspringbootbackend.entity.UserEntity;
 import lk.ijse.posreactspringbootbackend.exception.DataPersistFailedException;
@@ -25,15 +27,26 @@ public class ItemServiceImpl implements ItemService {
     private ItemDAO itemDAO;
 
     @Autowired
+    private CategoryDAO categoryDAO;
+
+    @Autowired
     private Mapping mapping;
 
     @Override
     public void saveItem(ItemDTO itemDTO) {
-        ItemEntity savedItem = itemDAO.save(mapping.convertToItemEntity(itemDTO));
+        // Retrieve the category entity by ID
+        CategoryEntity category = categoryDAO.findById(itemDTO.getCategoryId())
+                .orElseThrow(() -> new DataPersistFailedException("Category not found"));
 
-        if (savedItem == null && savedItem.getItemId() == 0) {
-            throw new DataPersistFailedException("Item not saved");
-        }
+        ItemEntity itemEntity = new ItemEntity();
+        itemEntity.setItemName(itemDTO.getItemName());
+        itemEntity.setItemPrice(itemDTO.getItemPrice());
+        itemEntity.setItemQuantity(itemDTO.getItemQuantity());
+        itemEntity.setItemImage(itemDTO.getItemImage());
+        itemEntity.setCategory(category);  // Set the category entity
+
+        // Save the item with the category reference
+        itemDAO.save(itemEntity);
     }
 
     @Override

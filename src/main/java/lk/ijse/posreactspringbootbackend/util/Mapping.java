@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class Mapping {
@@ -44,7 +45,15 @@ public class Mapping {
     }
 
     public List<ItemDTO> convertToItemDTOList(List<ItemEntity> itemEntityList) {
-        return modelMapper.map(itemEntityList, new TypeToken<List<ItemDTO>>() {}.getType());
+//        return modelMapper.map(itemEntityList, new TypeToken<List<ItemDTO>>() {}.getType());
+        // Customize mapping for categoryId from CategoryEntity
+        modelMapper.typeMap(ItemEntity.class, ItemDTO.class).addMappings(mapper -> {
+            mapper.map(src -> src.getCategory().getCat_id(), ItemDTO::setCategoryId);
+        });
+
+        return itemEntityList.stream()
+                .map(itemEntity -> modelMapper.map(itemEntity, ItemDTO.class))
+                .collect(Collectors.toList());
     }
 
     //order matters mapping

@@ -63,11 +63,13 @@ public class ItemController {
              @RequestPart("itemName") String updateItemName,
              @RequestPart("unitPrice")String updateUnitPrice,
              @RequestPart("itemQty") String updateItemQty,
+             @RequestPart("categoryId") String updateCategoryId,
              @RequestPart("itemImage")String updateItemImage){
 
         try {
             double parsedUpdatedUnitPrice = Double.parseDouble(updateUnitPrice);
             int parsedUpdatedItemQty = Integer.parseInt(updateItemQty);
+            int parsedUpdateCategoryId = Integer.parseInt(updateCategoryId);
 
             String updateBase64ItemImg = AppUtil.toBase64ProfilePic(updateItemImage);
 
@@ -77,6 +79,7 @@ public class ItemController {
             updateBuidItemDto.setItemPrice(parsedUpdatedUnitPrice);
             updateBuidItemDto.setItemQuantity(parsedUpdatedItemQty);
             updateBuidItemDto.setItemImage(updateBase64ItemImg);
+            updateBuidItemDto.setCategoryId(parsedUpdateCategoryId);
 
             itemService.updateItem(updateBuidItemDto);
 

@@ -55,9 +55,13 @@ public class ItemServiceImpl implements ItemService {
         if(!tmpItemEntity.isPresent()){
             throw new UserNotFoundException("Item Not Found");
         }else {
+            CategoryEntity category = categoryDAO.findById(updateBuidItemDto.getCategoryId())
+                    .orElseThrow(() -> new DataPersistFailedException("Category not found"));
+
             tmpItemEntity.get().setItemName(updateBuidItemDto.getItemName());
             tmpItemEntity.get().setItemPrice(updateBuidItemDto.getItemPrice());
             tmpItemEntity.get().setItemQuantity(updateBuidItemDto.getItemQuantity());
+            tmpItemEntity.get().setCategory(category);
             tmpItemEntity.get().setItemImage(updateBuidItemDto.getItemImage());
         }
     }
@@ -70,7 +74,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDTO> getAllItems() {
         List<ItemDTO> itemDTOS = mapping.convertToItemDTOList(itemDAO.findAll());
-        System.out.println(itemDTOS.get(0).getItemId());
+        System.out.println(itemDTOS.get(0).getCategoryId());
+        System.out.println(itemDTOS);
         return itemDTOS;
     }
 

@@ -53,7 +53,8 @@ public class WebSecurityConfig {
                         "/backend/item/{id}",
                         "/backend/orders",
                         "/backend/category",
-                        "/backend/category/items/{cat_id}"
+                        "/backend/category/items/{cat_id}",
+                        "/backend/user/id/{email}"
                 ).permitAll().anyRequest().authenticated())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwFilter, UsernamePasswordAuthenticationFilter.class).build();

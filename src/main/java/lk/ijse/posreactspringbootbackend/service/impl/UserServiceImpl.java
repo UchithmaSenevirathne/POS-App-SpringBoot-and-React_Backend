@@ -94,7 +94,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public int getUserIdByEmail(String email) {
-        return userDAO.findByEmail(email).getUserId();
+        UserEntity user = userDAO.findByEmail(email);
+        if (user != null) {
+            return user.getUserId(); // Make sure you are returning the correct field for the user ID
+        } else {
+            throw new RuntimeException("User not found");
+        }
     }
 
     private Set<SimpleGrantedAuthority> getAuthority(UserEntity userEntity) {

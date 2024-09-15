@@ -89,36 +89,6 @@ public class UserController {
         }
     }
 
-//    @PostMapping("/authenticate")
-//    public ResponseEntity<ResponseDTO> authenticate(@RequestBody UserDTO userDTO) {
-//        try {
-//            authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(userDTO.getEmail(), userDTO.getPassword()));
-//        } catch (Exception e) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-//                    .body(new ResponseDTO(VarList.Unauthorized, "Invalid Credentials", e.getMessage()));
-//        }
-//
-//        UserDTO loadedUser = userService.loadUserDetailsByUsername(userDTO.getEmail());
-//        if (loadedUser == null) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT)
-//                    .body(new ResponseDTO(VarList.Conflict, "Authorization Failure! Please Try Again", null));
-//        }
-//
-//        String token = jwtUtil.generateToken(loadedUser);
-//        if (token == null || token.isEmpty()) {
-//            return ResponseEntity.status(HttpStatus.CONFLICT)
-//                    .body(new ResponseDTO(VarList.Conflict, "Authorization Failure! Please Try Again", null));
-//        }
-//
-//        AuthDTO authDTO = new AuthDTO();
-//        authDTO.setEmail(loadedUser.getEmail());
-//        authDTO.setToken(token);
-//
-//        return ResponseEntity.status(HttpStatus.CREATED)
-//                .body(new ResponseDTO(VarList.Created, "Success", authDTO));
-//    }
-
     @PostMapping("/authenticate")
     public ResponseEntity<ResponseDTO> authenticate(@RequestBody UserDTO userDTO) {
         try {
@@ -242,8 +212,9 @@ public class UserController {
 //        return userService.deleteUser(userId) ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/{email}")
-    public int getUserIdByEmail(@PathVariable ("email") String email){
-        return userService.getUserIdByEmail(email);
+    @GetMapping("/id/{email}")
+    public ResponseEntity<Integer> getUserIdByEmail(@PathVariable("email") String email) {
+        int userId = userService.getUserIdByEmail(email);
+        return ResponseEntity.ok(userId); // Send back the userId as a response
     }
 }

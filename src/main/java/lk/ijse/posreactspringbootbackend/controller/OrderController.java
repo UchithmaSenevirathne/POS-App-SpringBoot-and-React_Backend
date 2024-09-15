@@ -16,12 +16,12 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
-    public ResponseEntity<String> saveOrder(@RequestBody OrderDTO orderDTO) {
+    public ResponseEntity<Void> placeOrder(@RequestBody OrderDTO orderDTO) {
         try {
-            orderService.saveOrder(orderDTO);
-            return new ResponseEntity<>("Order placed successfully", HttpStatus.CREATED);
+            orderService.placeOrder(orderDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 }

@@ -1,12 +1,11 @@
 package lk.ijse.posreactspringbootbackend.service.impl;
 
 import lk.ijse.posreactspringbootbackend.dao.CategoryDAO;
+import lk.ijse.posreactspringbootbackend.dao.CustomItemDAO;
 import lk.ijse.posreactspringbootbackend.dao.ItemDAO;
 import lk.ijse.posreactspringbootbackend.dto.ItemDTO;
-import lk.ijse.posreactspringbootbackend.dto.UserDTO;
 import lk.ijse.posreactspringbootbackend.entity.CategoryEntity;
 import lk.ijse.posreactspringbootbackend.entity.ItemEntity;
-import lk.ijse.posreactspringbootbackend.entity.UserEntity;
 import lk.ijse.posreactspringbootbackend.exception.DataPersistFailedException;
 import lk.ijse.posreactspringbootbackend.exception.ItemNotFoundException;
 import lk.ijse.posreactspringbootbackend.exception.UserNotFoundException;
@@ -75,7 +74,6 @@ public class ItemServiceImpl implements ItemService {
     public List<ItemDTO> getAllItems() {
         List<ItemDTO> itemDTOS = mapping.convertToItemDTOList(itemDAO.findAll());
         System.out.println(itemDTOS.get(0).getCategoryId());
-        System.out.println(itemDTOS);
         return itemDTOS;
     }
 
@@ -87,5 +85,12 @@ public class ItemServiceImpl implements ItemService {
         }else {
             itemDAO.deleteById(itemId);
         }
+    }
+
+    @Override
+    public List<ItemDTO> getItemsByCategory(int categoryId) {
+        List<ItemDTO> itemDTOS = mapping.convertToItemDTOList(itemDAO.getByCategoryId(categoryId));
+        System.out.println(itemDTOS);
+        return itemDTOS;
     }
 }

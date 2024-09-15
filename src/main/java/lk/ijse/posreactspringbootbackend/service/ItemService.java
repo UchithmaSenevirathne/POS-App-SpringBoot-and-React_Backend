@@ -15,4 +15,6 @@ public interface ItemService {
     List<ItemDTO> getAllItems();
 
     void deleteItem(int itemId);
+
+    List<ItemDTO> getItemsByCategory(int categoryId);
 }

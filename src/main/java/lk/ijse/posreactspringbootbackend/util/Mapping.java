@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -56,6 +57,16 @@ public class Mapping {
                 .collect(Collectors.toList());
     }
 
+    public List<ItemDTO> convertToItemDTOList(Optional<ItemEntity> itemEntityOptional) {
+        modelMapper.typeMap(ItemEntity.class, ItemDTO.class).addMappings(mapper -> {
+            mapper.map(src -> src.getCategory().getCat_id(), ItemDTO::setCategoryId);
+        });
+
+        return itemEntityOptional.stream()
+                .map(itemEntity -> modelMapper.map(itemEntity, ItemDTO.class))
+                .collect(Collectors.toList());
+    }
+
     //order matters mapping
     public OrderDTO convertToOrderDTO(OrderEntity orderEntity) {
         return modelMapper.map(orderEntity, OrderDTO.class);
@@ -69,6 +80,7 @@ public class Mapping {
         return modelMapper.map(orderEntityList, new TypeToken<List<OrderDTO>>() {}.getType());
     }
 
+
     //category matters mapping
     public CategoryDTO convertToCategoryDTO(CategoryEntity orderEntity) {
         return modelMapper.map(orderEntity, CategoryDTO.class);
@@ -81,4 +93,5 @@ public class Mapping {
     public List<CategoryDTO> convertToCategoryDTOList(List<CategoryEntity> orderEntityList) {
         return modelMapper.map(orderEntityList, new TypeToken<List<CategoryDTO>>() {}.getType());
     }
+
 }

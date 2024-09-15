@@ -241,4 +241,9 @@ public class UserController {
         }
 //        return userService.deleteUser(userId) ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping("/{email}")
+    public int getUserIdByEmail(@PathVariable ("email") String email){
+        return userService.getUserIdByEmail(email);
+    }
 }

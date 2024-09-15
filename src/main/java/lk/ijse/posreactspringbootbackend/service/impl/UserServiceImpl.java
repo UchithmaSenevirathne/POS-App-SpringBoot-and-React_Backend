@@ -92,6 +92,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return mapping.convertToUserDTO(user);
     }
 
+    @Override
+    public int getUserIdByEmail(String email) {
+        return userDAO.findByEmail(email).getUserId();
+    }
+
     private Set<SimpleGrantedAuthority> getAuthority(UserEntity userEntity) {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(userEntity.getUserRole()));

@@ -19,4 +19,6 @@ public interface UserService {
     UserDetails loadUserByUsername(String email);
 
     UserDTO loadUserDetailsByUsername(String email);
+
+    int getUserIdByEmail(String email);
 }

@@ -73,7 +73,6 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDTO> getAllItems() {
         List<ItemDTO> itemDTOS = mapping.convertToItemDTOList(itemDAO.findAll());
-        System.out.println(itemDTOS.get(0).getCategoryId());
         return itemDTOS;
     }
 
@@ -90,7 +89,6 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemDTO> getItemsByCategory(int categoryId) {
         List<ItemDTO> itemDTOS = mapping.convertToItemDTOList(itemDAO.getByCategoryId(categoryId));
-        System.out.println(itemDTOS);
         return itemDTOS;
     }
 }

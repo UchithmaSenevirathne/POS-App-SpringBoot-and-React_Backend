@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,8 +12,7 @@ import java.util.List;
 public class OrderDTO {
     private int order_id;
     private int user_id;
-    private List<Integer> itemIds;
-    private int quantity;
+    private Map<Integer, Integer> itemQuantities;
     private double total_price;
     private String order_date;
 }

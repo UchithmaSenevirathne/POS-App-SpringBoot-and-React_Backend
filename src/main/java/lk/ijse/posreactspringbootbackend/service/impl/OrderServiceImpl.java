@@ -29,43 +29,32 @@ public class OrderServiceImpl implements OrderService {
     private Mapping mapping;
 
     @Override
-    public void saveOrder(OrderDTO orderDTO) throws Exception {
-        UserEntity user = userDAO.findById(orderDTO.getUser_id())
-                .orElseThrow(() -> new Exception("User not found"));
-
-        List<ItemEntity> items = itemDAO.findAllById(orderDTO.getItemIds());
-
-        double totalPrice = items.stream().mapToDouble(ItemEntity::getItemPrice).sum();
-
-        OrderEntity order = new OrderEntity();
-        order.setUser(user);
-        order.setItems(items);
-        order.setQuantity(orderDTO.getQuantity());
-        order.setTotal_price(totalPrice);
-        order.setOrder_date(orderDTO.getOrder_date());
-
-        orderDAO.save(order);
-    }
-
-    @Override
     public void placeOrder(OrderDTO orderDTO) {
         UserEntity user = userDAO.findById(orderDTO.getUser_id()).orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<ItemEntity> items = itemDAO.findAllById(orderDTO.getItemIds());
+        List<ItemEntity> items = itemDAO.findAllById(orderDTO.getItemQuantities().keySet());
 
         // Create and save the order
         OrderEntity order = new OrderEntity();
         order.setUser(user);
         order.setItems(items);
-        order.setQuantity(orderDTO.getQuantity());
         order.setTotal_price(orderDTO.getTotal_price());
         order.setOrder_date(orderDTO.getOrder_date());
         orderDAO.save(order);
 
-        // Reduce item quantities
+        // Reduce item quantities based on the ordered quantity for each item
         for (ItemEntity item : items) {
-            item.setItemQuantity(item.getItemQuantity() - 1); // Adjust as needed
+            // Get the ordered quantity for this item from the map
+            int orderedQuantity = orderDTO.getItemQuantities().get(item.getItemId());
+
+            // Reduce the item quantity in the database by the ordered amount
+            item.setItemQuantity(item.getItemQuantity() - orderedQuantity);
             itemDAO.save(item);
         }
+    }
+
+    @Override
+    public List<OrderDTO> getOrdersByUser(int userId) {
+        return List.of();
     }
 }

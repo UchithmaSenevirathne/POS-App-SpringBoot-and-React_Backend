@@ -116,7 +116,6 @@ public class OrderServiceImpl implements OrderService {
                 orderDetails.add(dto);
             }
         }
-        System.out.println(orderDetails);
         return orderDetails;
     }
 

@@ -13,7 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Base64;
 import java.util.List;
 
 @RestController
@@ -38,7 +40,8 @@ public class ItemController {
             int parsedItemQty = Integer.parseInt(itemQty);
             int parsedCategoryId = Integer.parseInt(categoryId);
 
-            String base64ItemImg = AppUtil.toBase64ProfilePic(itemImage);
+            System.out.println(itemImage);
+            String base64ItemImg = Base64.getEncoder().encodeToString(itemImage.getBytes());
 
             ItemDTO itemDTO = new ItemDTO();
 

@@ -9,4 +9,6 @@ public interface OrderService {
     void placeOrder(OrderDTO orderDTO);
 
     List<UserOrderDetailsDTO> getUserOrderDetails(int userId);
+
+    List<UserOrderDetailsDTO> getAllOrders();
 }

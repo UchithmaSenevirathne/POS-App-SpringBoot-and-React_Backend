@@ -37,4 +37,14 @@ public class OrderController {
             return null;
         }
     }
+
+    @GetMapping
+    public List<UserOrderDetailsDTO> getAllOrders() {
+        try {
+            return orderService.getAllOrders();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

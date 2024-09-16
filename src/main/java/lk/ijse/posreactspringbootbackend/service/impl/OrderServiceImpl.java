@@ -80,6 +80,7 @@ public class OrderServiceImpl implements OrderService {
                 UserOrderDetailsDTO dto = new UserOrderDetailsDTO();
                 dto.setOrderId(order.getOrder_id());
                 dto.setUserId(order.getUser().getUserId());
+                dto.setOrderAddress(order.getUser().getAddress());
                 dto.setProductId(item.getItemId());
                 dto.setProductName(item.getItemName());
                 dto.setProductPrice(item.getItemPrice());
@@ -90,6 +91,32 @@ public class OrderServiceImpl implements OrderService {
                 orderDetails.add(dto);
             }
         }
+        return orderDetails;
+    }
+
+    @Override
+    public List<UserOrderDetailsDTO> getAllOrders() {
+        List<UserOrderDetailsDTO> orderDetails = new ArrayList<>();
+        List<OrderEntity> orders = orderDAO.findAll();
+
+        for (OrderEntity order : orders) {
+            for (OrderItem orderItem : order.getOrderItems()) {
+                ItemEntity item = orderItem.getItem();
+                UserOrderDetailsDTO dto = new UserOrderDetailsDTO();
+                dto.setOrderId(order.getOrder_id());
+                dto.setUserId(order.getUser().getUserId());
+                dto.setOrderAddress(order.getUser().getAddress());
+                dto.setProductId(item.getItemId());
+                dto.setProductName(item.getItemName());
+                dto.setProductPrice(item.getItemPrice());
+                dto.setProductQuantity(orderItem.getQuantity());
+                dto.setProductImage(item.getItemImage());
+                dto.setOrderTotalPrice(order.getTotal_price());
+                dto.setOrderDate(order.getOrder_date());
+                orderDetails.add(dto);
+            }
+        }
+        System.out.println(orderDetails);
         return orderDetails;
     }
 

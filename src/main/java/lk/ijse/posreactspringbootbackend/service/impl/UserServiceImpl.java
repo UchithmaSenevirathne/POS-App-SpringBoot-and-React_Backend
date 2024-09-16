@@ -61,11 +61,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if(!tmpUserEntity.isPresent()){
             throw new UserNotFoundException("User Not Found");
         }else {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             tmpUserEntity.get().setName(updateBuidUserDto.getName());
             tmpUserEntity.get().setAddress(updateBuidUserDto.getAddress());
             tmpUserEntity.get().setContact(updateBuidUserDto.getContact());
             tmpUserEntity.get().setEmail(updateBuidUserDto.getEmail());
-            tmpUserEntity.get().setPassword(updateBuidUserDto.getPassword());
+            tmpUserEntity.get().setPassword(passwordEncoder.encode(updateBuidUserDto.getPassword()));
             tmpUserEntity.get().setProfilePicture(updateBuidUserDto.getProfilePicture());
         }
     }

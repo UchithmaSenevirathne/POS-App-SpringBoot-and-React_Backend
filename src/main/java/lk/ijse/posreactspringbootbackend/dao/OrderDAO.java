@@ -10,4 +10,6 @@ import java.util.List;
 
 @Repository
 public interface OrderDAO extends JpaRepository<OrderEntity, Integer> {
+
+    List<OrderEntity> findByUser(UserEntity user);
 }

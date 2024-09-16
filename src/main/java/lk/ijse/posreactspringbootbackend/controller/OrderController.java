@@ -1,6 +1,7 @@
 package lk.ijse.posreactspringbootbackend.controller;
 
 import lk.ijse.posreactspringbootbackend.dto.OrderDTO;
+import lk.ijse.posreactspringbootbackend.dto.UserOrderDetailsDTO;
 import lk.ijse.posreactspringbootbackend.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,16 @@ public class OrderController {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @GetMapping("/user/{userId}/details")
+    public List<UserOrderDetailsDTO> getUserOrderDetails(@PathVariable int userId) {
+        try {
+            return orderService.getUserOrderDetails(userId);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

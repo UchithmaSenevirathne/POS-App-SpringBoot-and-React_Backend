@@ -12,7 +12,7 @@ import java.util.Map;
 public class OrderDTO {
     private int order_id;
     private int user_id;
-    private Map<Integer, Integer> itemQuantities;
+    private Map<Integer, Integer> itemQuantities; // itemId -> quantity
     private double total_price;
     private String order_date;
 }

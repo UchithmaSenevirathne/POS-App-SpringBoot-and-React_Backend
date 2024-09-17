@@ -52,7 +52,7 @@ public class UserController {
         try {
             System.out.println("save control-try");
             //handle prof.pic
-            String base64ProfilePic = AppUtil.toBase64ProfilePic(profilePicture);
+//            String base64ProfilePic = AppUtil.toBase64ProfilePic(profilePicture);
 
             UserDTO userDTO = new UserDTO();
 
@@ -61,7 +61,7 @@ public class UserController {
             userDTO.setContact(contact);
             userDTO.setEmail(email);
             userDTO.setPassword(password);
-            userDTO.setProfilePicture(base64ProfilePic);
+            userDTO.setProfilePicture(profilePicture);
 
             int res = userService.saveUser(userDTO);
             switch (res) {
@@ -178,8 +178,8 @@ public class UserController {
     @GetMapping("/details")
     public ResponseEntity<UserDTO> getUserDetails(@RequestParam String email) {
         UserDTO userDTO = userService.loadUserDetailsByUsername(email);
-        String profilePic = AppUtil.toProfilePic(userDTO.getProfilePicture());
-        userDTO.setProfilePicture(profilePic);
+//        String profilePic = AppUtil.toProfilePic(userDTO.getProfilePicture());
+//        userDTO.setProfilePicture(profilePic);
         if (userDTO != null) {
             return ResponseEntity.ok(userDTO);
         } else {

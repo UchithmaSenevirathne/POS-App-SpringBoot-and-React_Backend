@@ -1,6 +1,7 @@
 package lk.ijse.posreactspringbootbackend.controller;
 
 import lk.ijse.posreactspringbootbackend.dto.OrderDTO;
+import lk.ijse.posreactspringbootbackend.dto.RecentOrderDTO;
 import lk.ijse.posreactspringbootbackend.dto.UserOrderDetailsDTO;
 import lk.ijse.posreactspringbootbackend.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,16 @@ public class OrderController {
         try {
             return orderService.getAllOrders();
         }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @GetMapping("/recent")
+    public List<RecentOrderDTO> getRecentOrderDetails() {
+        try {
+            return orderService.getRecentOrderDetails();
+        }catch (Exception e) {
             e.printStackTrace();
             return null;
         }

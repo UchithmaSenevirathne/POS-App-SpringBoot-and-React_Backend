@@ -36,19 +36,18 @@ public class ItemController {
             @RequestPart("itemImage") String itemImage
     ) {
         try {
+//            String base64Image = Base64.getEncoder().encodeToString(itemImage.getBytes());
+
             double parsedUnitPrice = Double.parseDouble(unitPrice);
             int parsedItemQty = Integer.parseInt(itemQty);
             int parsedCategoryId = Integer.parseInt(categoryId);
-
-            System.out.println(itemImage);
-            String base64ItemImg = Base64.getEncoder().encodeToString(itemImage.getBytes());
 
             ItemDTO itemDTO = new ItemDTO();
 
             itemDTO.setItemName(itemName);
             itemDTO.setItemPrice(parsedUnitPrice);
             itemDTO.setItemQuantity(parsedItemQty);
-            itemDTO.setItemImage(base64ItemImg);
+            itemDTO.setItemImage(itemImage);
             itemDTO.setCategoryId(parsedCategoryId);
 
             itemService.saveItem(itemDTO);
@@ -74,14 +73,12 @@ public class ItemController {
             int parsedUpdatedItemQty = Integer.parseInt(updateItemQty);
             int parsedUpdateCategoryId = Integer.parseInt(updateCategoryId);
 
-            String updateBase64ItemImg = AppUtil.toBase64ProfilePic(updateItemImage);
-
             var updateBuidItemDto = new ItemDTO();
             updateBuidItemDto.setItemId(id);
             updateBuidItemDto.setItemName(updateItemName);
             updateBuidItemDto.setItemPrice(parsedUpdatedUnitPrice);
             updateBuidItemDto.setItemQuantity(parsedUpdatedItemQty);
-            updateBuidItemDto.setItemImage(updateBase64ItemImg);
+            updateBuidItemDto.setItemImage(updateItemImage);
             updateBuidItemDto.setCategoryId(parsedUpdateCategoryId);
 
             itemService.updateItem(updateBuidItemDto);
@@ -96,12 +93,14 @@ public class ItemController {
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ItemDTO getSelectedItem(@PathVariable ("id") int itemId){
-        return itemService.getSelectedItem(itemId);
+        ItemDTO selectedItem = itemService.getSelectedItem(itemId);
+        return selectedItem;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ItemDTO> getAllItems(){
-        return itemService.getAllItems();
+        List<ItemDTO> allItems = itemService.getAllItems();
+        return allItems;
     }
 
     @DeleteMapping("/{id}")

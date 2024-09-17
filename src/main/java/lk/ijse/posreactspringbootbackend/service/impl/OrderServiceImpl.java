@@ -6,6 +6,7 @@ import lk.ijse.posreactspringbootbackend.dao.OrderItemDAO;
 import lk.ijse.posreactspringbootbackend.dao.UserDAO;
 import lk.ijse.posreactspringbootbackend.dto.ItemDTO;
 import lk.ijse.posreactspringbootbackend.dto.OrderDTO;
+import lk.ijse.posreactspringbootbackend.dto.RecentOrderDTO;
 import lk.ijse.posreactspringbootbackend.dto.UserOrderDetailsDTO;
 import lk.ijse.posreactspringbootbackend.entity.ItemEntity;
 import lk.ijse.posreactspringbootbackend.entity.OrderEntity;
@@ -112,6 +113,26 @@ public class OrderServiceImpl implements OrderService {
                 dto.setProductQuantity(orderItem.getQuantity());
                 dto.setProductImage(item.getItemImage());
                 dto.setOrderTotalPrice(order.getTotal_price());
+                dto.setOrderDate(order.getOrder_date());
+                orderDetails.add(dto);
+            }
+        }
+        return orderDetails;
+    }
+
+    @Override
+    public List<RecentOrderDTO> getRecentOrderDetails() {
+        List<RecentOrderDTO> orderDetails = new ArrayList<>();
+        List<OrderEntity> orders = orderDAO.findAll();
+
+        for (OrderEntity order : orders) {
+            for (OrderItem orderItem : order.getOrderItems()) {
+                ItemEntity item = orderItem.getItem();
+                RecentOrderDTO dto = new RecentOrderDTO();
+                dto.setOrderId(order.getOrder_id());
+                dto.setUserId(order.getUser().getUserId());
+                dto.setUserAddress(order.getUser().getAddress());
+                dto.setOrderTotal(order.getTotal_price());
                 dto.setOrderDate(order.getOrder_date());
                 orderDetails.add(dto);
             }

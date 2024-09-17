@@ -1,6 +1,7 @@
 package lk.ijse.posreactspringbootbackend.controller;
 
 import lk.ijse.posreactspringbootbackend.dto.OrderDTO;
+import lk.ijse.posreactspringbootbackend.dto.OrderItemDTO;
 import lk.ijse.posreactspringbootbackend.dto.RecentOrderDTO;
 import lk.ijse.posreactspringbootbackend.dto.UserOrderDetailsDTO;
 import lk.ijse.posreactspringbootbackend.service.OrderService;
@@ -57,5 +58,10 @@ public class OrderController {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @GetMapping("/popular")
+    public List<OrderItemDTO> getPopularItems() {
+        return orderService.getPopularItems();
     }
 }

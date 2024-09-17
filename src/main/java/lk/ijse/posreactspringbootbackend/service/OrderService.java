@@ -1,6 +1,7 @@
 package lk.ijse.posreactspringbootbackend.service;
 
 import lk.ijse.posreactspringbootbackend.dto.OrderDTO;
+import lk.ijse.posreactspringbootbackend.dto.OrderItemDTO;
 import lk.ijse.posreactspringbootbackend.dto.RecentOrderDTO;
 import lk.ijse.posreactspringbootbackend.dto.UserOrderDetailsDTO;
 
@@ -14,4 +15,6 @@ public interface OrderService {
     List<UserOrderDetailsDTO> getAllOrders();
 
     List<RecentOrderDTO> getRecentOrderDetails();
+
+    List<OrderItemDTO> getPopularItems();
 }

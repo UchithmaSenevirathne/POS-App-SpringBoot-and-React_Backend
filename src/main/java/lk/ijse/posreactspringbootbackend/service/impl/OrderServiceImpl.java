@@ -4,10 +4,7 @@ import lk.ijse.posreactspringbootbackend.dao.ItemDAO;
 import lk.ijse.posreactspringbootbackend.dao.OrderDAO;
 import lk.ijse.posreactspringbootbackend.dao.OrderItemDAO;
 import lk.ijse.posreactspringbootbackend.dao.UserDAO;
-import lk.ijse.posreactspringbootbackend.dto.ItemDTO;
-import lk.ijse.posreactspringbootbackend.dto.OrderDTO;
-import lk.ijse.posreactspringbootbackend.dto.RecentOrderDTO;
-import lk.ijse.posreactspringbootbackend.dto.UserOrderDetailsDTO;
+import lk.ijse.posreactspringbootbackend.dto.*;
 import lk.ijse.posreactspringbootbackend.entity.ItemEntity;
 import lk.ijse.posreactspringbootbackend.entity.OrderEntity;
 import lk.ijse.posreactspringbootbackend.entity.OrderItem;
@@ -18,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -126,8 +124,6 @@ public class OrderServiceImpl implements OrderService {
         List<OrderEntity> orders = orderDAO.findAll();
 
         for (OrderEntity order : orders) {
-            for (OrderItem orderItem : order.getOrderItems()) {
-                ItemEntity item = orderItem.getItem();
                 RecentOrderDTO dto = new RecentOrderDTO();
                 dto.setOrderId(order.getOrder_id());
                 dto.setUserId(order.getUser().getUserId());
@@ -135,9 +131,27 @@ public class OrderServiceImpl implements OrderService {
                 dto.setOrderTotal(order.getTotal_price());
                 dto.setOrderDate(order.getOrder_date());
                 orderDetails.add(dto);
-            }
         }
         return orderDetails;
+    }
+
+    @Override
+    public List<OrderItemDTO> getPopularItems() {
+        List<Object[]> popularItems = orderDAO.findPopularItemsWithQuantity();
+        List<OrderItemDTO> popularItemDTOs = new ArrayList<>();
+
+        for (Object[] itemData : popularItems) {
+            int itemId = (int) itemData[0];
+            String itemName = (String) itemData[1];
+            Double itemPrice = (Double) itemData[2];
+            String itemImage = (String) itemData[3];
+            int itemQuantity = (int) itemData[4]; // This is the item quantity from the Item table
+
+            OrderItemDTO orderItemDTO = new OrderItemDTO(itemId, itemName, itemPrice, itemImage, itemQuantity);
+            popularItemDTOs.add(orderItemDTO);
+        }
+
+        return popularItemDTOs;
     }
 
 }
